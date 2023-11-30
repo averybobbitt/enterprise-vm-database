@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <h3 class="text-center mb-3">Storage Configs</h3>
+
+    <table id="query_4_6_table" class="table table-striped table-bordered">
+        <thead>
+        <tr>
+            <th>Storage ID</th>
+            <th>VM ID</th>
+            <th>Storage Type</th>
+            <th>Storage Capacity (GB)</th>
+            <th>Storage Controller</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for storage_config in result %}
+        <tr>
+            <td>{{ storage_config.storage_id }}</td>
+            <td>{{ storage_config.vm_id }}</td>
+            <td>{{ storage_config.storage_type }}</td>
+            <td>{{ storage_config.storage_capacity_gb }}</td>
+            <td>{{ storage_config.storage_controller }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

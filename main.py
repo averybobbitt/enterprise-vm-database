@@ -11,8 +11,13 @@ from models.Snapshot import Snapshot
 from models.StorageConfig import StorageConfig
 from models.User import User
 
-HOST = "localhost"
-PORT = 3307
+# dev host
+# HOST = "localhost"
+# dev port
+# PORT = 3307
+
+HOST = "db"
+PORT = 3306
 USER = "root"
 PASSWORD = "example"
 DATABASE = "virtual_machines"
@@ -80,7 +85,7 @@ def run_query_1():
                                                              Instance.vm_id == HardwareConfig.vm_id).filter(
         Instance.status == 'Running').all()
 
-    return render_template('query_result.html', result=result)
+    return render_template('tables/query1.html', result=result)
 
 
 # Insert a new network configuration for a specific virtual machine
@@ -100,7 +105,7 @@ def run_query_2():
 
     result = NetworkConfig.query.all()
 
-    return render_template('query_result.html', result=result)
+    return render_template('tables/query2.html', result=result)
 
 
 # Update the description of a virtual machine
@@ -111,18 +116,20 @@ def run_query_3():
 
     result = Instance.query.all()
 
-    return render_template('query_result.html', result=result)
+    return render_template('tables/query3-9-10.html', result=result)
 
 
-# Delete a storage configuration for a specific virtual machine
+# Update the storage capacity of a specific storage configuration
 @app.route('/run_query_4')
 def run_query_4():
-    db.session.query(StorageConfig).filter(StorageConfig.vm_id.in_([1, 2])).delete()
-    db.session.commit()
+    storage_config = StorageConfig.query.filter_by(storage_id=2).first()
+    if storage_config:
+        storage_config.storage_capacity_gb = 100
+        db.session.commit()
 
     result = StorageConfig.query.all()
 
-    return render_template('query_result.html', result=result)
+    return render_template('tables/query4-6.html', result=result)
 
 
 # Select all virtual machines with their associated logs
@@ -131,23 +138,22 @@ def run_query_5():
     result = db.session.query(Instance, Log.log_message, Log.log_timestamp).outerjoin(Log,
                                                                                       Instance.vm_id == Log.vm_id).all()
 
-    return render_template('query_result.html', result=result)
+    return render_template('tables/query5.html', result=result)
 
 
-# Update the storage capacity of a specific storage configuration
+# Delete a storage configuration for a specific virtual machine
 @app.route('/run_query_6')
 def run_query_6():
-    storage_config = StorageConfig.query.filter_by(storage_id=2).first()
-    if storage_config:
-        storage_config.storage_capacity_gb = 100
-        db.session.commit()
+    db.session.query(StorageConfig).filter(StorageConfig.vm_id.in_([1, 2])).delete()
+    db.session.commit()
 
     result = StorageConfig.query.all()
 
-    return render_template('query_result.html', result=result)
+    return render_template('tables/query4-6.html', result=result)
 
 
 # Select the latest snapshot for each virtual machine
+# (logic works, every snapshot is created at the same time so all are displayed)
 @app.route('/run_query_7')
 def run_query_7():
     subquery = db.session.query(Snapshot.vm_id, func.max(Snapshot.snapshot_timestamp).label(
@@ -155,7 +161,7 @@ def run_query_7():
     result = db.session.query(Snapshot).join(subquery, (Snapshot.vm_id == subquery.c.vm_id) & (
             Snapshot.snapshot_timestamp == subquery.c.latest_snapshot)).all()
 
-    return render_template('query_result.html', result=result)
+    return render_template('tables/query7.html', result=result)
 
 
 # Insert a new snapshot for a specific virtual machine
@@ -167,14 +173,74 @@ def run_query_8():
 
     result = Snapshot.query.all()
 
-    return render_template('query_result.html', result=result)
+    return render_template('tables/query8.html', result=result)
+
+
+# Purge non-running VM instances using the PurgeInstances procedure
+@app.route('/run_query_9')
+def run_query_9():
+    stmt = text("CALL PurgeInstances();")
+
+    db.session.execute(stmt)
+    db.session.commit()
+
+    result = Instance.query.all()
+
+    return render_template('tables/query3-9-10.html', result=result)
+
+
+# Create a new VM instance using the CreateInstance procedure
+@app.route('/run_query_10')
+def run_query_10():
+    user_id = 1
+    vm_name = 'MyVM'
+    vm_description = 'Description of MyVM'
+    os_type = 'Linux'
+    network_type = 'Ethernet'
+    ip_address = '192.168.1.2'
+    subnet_mask = '255.255.255.0'
+    gateway = '192.168.1.1'
+    cpu_cores = 2
+    ram_size_gb = 4
+    storage_type = 'SSD'
+    storage_capacity_gb = 100
+    storage_controller = 'SATA'
+    proc_stmt = text(
+        f"CALL CreateVirtualMachineInstance({user_id}, '{vm_name}', '{vm_description}', '{os_type}', '{network_type}', '{ip_address}',"
+        f"'{subnet_mask}', '{gateway}', {cpu_cores}, {ram_size_gb}, '{storage_type}', {storage_capacity_gb}, '{storage_controller}')"
+    )
+
+    db.session.execute(proc_stmt)
+    db.session.commit()
+
+    result = Instance.query.all()
+
+    return render_template('tables/query3-9-10.html', result=result)
 
 
 with app.app_context():
     db.init_app(app)
-    # execute_script("sql_scripts/00-InitDB.sql")
-    # create_procedure("sql_scripts/05-CreateUser.sql")
-    # create_procedure("sql_scripts/06-CreateInstance.sql")
+
+    print("Creating tables...")
+    execute_script("sql_scripts/01-CreateTables.sql")
+    print("Created tables successfully.\n")
+
+    print("Populating tables...")
+    execute_script("sql_scripts/02-PopulateTables.sql")
+    print("Populated tables successfully.\n")
+
+    print("Creating views...")
+    execute_script("sql_scripts/03-CreateViews.sql")
+    print("Created views successfully.\n")
+
+    print("Creating indexes...")
+    execute_script("sql_scripts/04-CreateIndexes.sql")
+    print("Created indexes successfully.\n")
+
+    print("Creating procedures...")
+    create_procedure("sql_scripts/05-PurgeInstances.sql")
+    create_procedure("sql_scripts/06-CreateInstance.sql")
+    print("Created procedures successfully.\n")
 
 if __name__ == '__main__':
     app.run(debug=False)

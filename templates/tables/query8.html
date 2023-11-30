@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <h3 class="text-center mb-3">VM Snapshots</h3>
+
+    <table id="query_8_table" class="table table-striped table-bordered">
+        <thead>
+        <tr>
+            <th>Snapshot ID</th>
+            <th>VM ID</th>
+            <th>Snapshot Name</th>
+            <th>Snapshot Description</th>
+            <th>Snapshot Timestamp</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for snapshot in result %}
+        <tr>
+            <td>{{ snapshot.snapshot_id }}</td>
+            <td>{{ snapshot.vm_id }}</td>
+            <td>{{ snapshot.snapshot_name }}</td>
+            <td>{{ snapshot.snapshot_description }}</td>
+            <td>{{ snapshot.snapshot_timestamp }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

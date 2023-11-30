@@ -1,14 +1,37 @@
 {% extends "layout.html" %}
 
 {% block content %}
-<a class="btn btn-danger" type="button" href="{{ url_for('run_query_1') }}">Select Running VMs with Hardware
-    Configurations</a>
-<!--<button onclick="{{ url_for('run_query_1') }}">Select Running VMs with Hardware Configurations</button>-->
-<!--<button onclick="{{ url_for('run_query_2') }}">Insert New Network Configuration</button>-->
-<!--<button onclick="{{ url_for('run_query_3') }}">Update VM Description</button>-->
-<!--<button onclick="{{ url_for('run_query_4') }}">Delete Storage Configuration</button>-->
-<!--<button onclick="{{ url_for('run_query_5') }}">Select VMs with Logs</button>-->
-<!--<button onclick="{{ url_for('run_query_6') }}">Update Storage Capacity</button>-->
-<!--<button onclick="{{ url_for('run_query_7') }}">Select Latest Snapshots</button>-->
-<!--<button onclick="{{ url_for('run_query_8') }}">Insert New Snapshot</button>-->
+<div class="container vstack mt-5 gap-3 text-center w-50">
+    <a class="btn btn-outline-primary btn-lg" type="button" href="{{ url_for('run_query_1') }}">1. Select Running VMs
+        with Hardware Configurations</a>
+
+    <a class="btn btn-outline-success btn-lg" type="button" href="{{ url_for('run_query_2') }}">2. Insert New Network
+        Configuration</a>
+
+    <a class="btn btn-outline-warning btn-lg" type="button" href="{{ url_for('run_query_3') }}">3. Update VM
+        Description</a>
+
+    <a class="btn btn-outline-warning btn-lg" type="button" href="{{ url_for('run_query_4') }}">4. Update Storage
+        Capacity</a>
+
+
+    <a class="btn btn-outline-primary btn-lg" type="button" href="{{ url_for('run_query_5') }}">5. Select VMs with
+        Logs</a>
+
+    <a class="btn btn-outline-danger btn-lg" type="button" href="{{ url_for('run_query_6') }}">6. Delete Storage
+        Configuration</a>
+
+
+    <a class="btn btn-outline-primary btn-lg" type="button" href="{{ url_for('run_query_7') }}">7. Select VM
+        Snapshots</a>
+
+    <a class="btn btn-outline-success btn-lg" type="button" href="{{ url_for('run_query_8') }}">8. Insert New
+        Snapshot</a>
+
+    <a class="btn btn-outline-danger btn-lg" type="button" href="{{ url_for('run_query_9') }}">9. Purge Non-Running VM
+        Instances</a>
+
+    <a class="btn btn-outline-success btn-lg" type="button" href="{{ url_for('run_query_10') }}">10. Add a New VM
+        Instance</a>
+</div>
 {% endblock %}

@@ -16,8 +16,8 @@ INSERT INTO instances (user_id, vm_name, vm_description, os_type, os_version, st
 VALUES (1, 'WebServer', 'Web server for production', 'Linux', 'Fedora 34', 'Running'),
        (6, 'AnalyticsServer', 'Analytics server for reporting', 'Windows', 'Server 2016', 'Running'),
        (4, 'BackupServer', 'Backup server for critical data', 'Linux', 'Debian 10', 'Error'),
-       (2, 'DevEnv', 'Development environment', 'Windows', '10', 'Running'),
-       (3, 'TestEnv', 'Testing environment', 'Linux', 'Ubuntu 18.04', 'Running');
+       (2, 'DevEnv', 'Development environment', 'Windows', '10', 'Stopped'),
+       (3, 'TestEnv', 'Testing environment', 'Linux', 'Ubuntu 18.04', 'Paused');
 
 
 -- Insert sample network configurations into the 'network_configs' table

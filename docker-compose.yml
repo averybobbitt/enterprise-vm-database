@@ -16,7 +16,11 @@ services:
       MYSQL_ROOT_PASSWORD: 'example'
       MYSQL_DATABASE: 'virtual_machines'
 
-#  web:
-#    container_name: final-web
-#    image: db-systems-final-web
-#    build: .
+  web:
+    container_name: final-web
+    image: db-systems-final-web
+    build: .
+    ports:
+      - "80:80"
+    depends_on:
+      - db
