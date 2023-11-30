@@ -1,0 +1,15 @@
+version: '3'
+
+services:
+  admin:
+    container_name: final-admin
+    image: adminer
+    ports:
+      - '8080:8080'
+
+  db:
+    container_name: final-db
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: 'example'
+      MYSQL_DATABASE: 'virtual_machines'
