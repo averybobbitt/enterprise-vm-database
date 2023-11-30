@@ -221,26 +221,26 @@ def run_query_10():
 with app.app_context():
     db.init_app(app)
 
-    print("Creating tables...")
-    execute_script("sql_scripts/01-CreateTables.sql")
-    print("Created tables successfully.\n")
+    # print("Creating tables...")
+    # execute_script("sql_scripts/01-CreateTables.sql")
+    # print("Created tables successfully.\n")
 
-    print("Populating tables...")
-    execute_script("sql_scripts/02-PopulateTables.sql")
-    print("Populated tables successfully.\n")
+    # print("Populating tables...")
+    # execute_script("sql_scripts/02-PopulateTables.sql")
+    # print("Populated tables successfully.\n")
 
-    print("Creating views...")
-    execute_script("sql_scripts/03-CreateViews.sql")
-    print("Created views successfully.\n")
+    # print("Creating views...")
+    # execute_script("sql_scripts/03-CreateViews.sql")
+    # print("Created views successfully.\n")
 
-    print("Creating indexes...")
-    execute_script("sql_scripts/04-CreateIndexes.sql")
-    print("Created indexes successfully.\n")
+    # print("Creating indexes...")
+    # execute_script("sql_scripts/04-CreateIndexes.sql")
+    # print("Created indexes successfully.\n")
 
-    print("Creating procedures...")
-    create_procedure("sql_scripts/05-PurgeInstances.sql")
-    create_procedure("sql_scripts/06-CreateInstance.sql")
-    print("Created procedures successfully.\n")
+    # print("Creating procedures...")
+    # create_procedure("sql_scripts/05-PurgeInstances.sql")
+    # create_procedure("sql_scripts/06-CreateInstance.sql")
+    # print("Created procedures successfully.\n")
 
 if __name__ == '__main__':
     app.run(debug=False)

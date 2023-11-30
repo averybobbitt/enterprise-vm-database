@@ -21,6 +21,10 @@ services:
     image: db-systems-final-web
     build: .
     ports:
-      - "80:80"
+      - "8888:80"
     depends_on:
       - db
+
+networks: 
+  default: 
+    name: default-ext
