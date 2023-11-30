@@ -1,5 +1,5 @@
 -- Temporarily change delimiter to allow the procedure to be compacted into a single statement
-DELIMITER //
+# DELIMITER //
 
 -- Define the procedure
 CREATE PROCEDURE CreateVirtualMachineInstance(
@@ -38,24 +38,24 @@ BEGIN
     -- Create storage configuration
     INSERT INTO storage_configs (vm_id, storage_type, storage_capacity_gb, storage_controller)
     VALUES (new_vm_id, p_storage_type, p_storage_capacity_gb, p_storage_controller);
-END //
+END;
 
 -- Set delimiter back to default
-DELIMITER ;
+# DELIMITER ;
 
 -- Use procedure to create a new instance with only required fields
-CALL CreateVirtualMachineInstance(
-        1, -- user_id
-        'MyVM', -- vm_name
-        'Description of MyVM', -- vm_description
-        'Linux', -- os_type
-        'Ethernet', -- network_type
-        '192.168.1.2', -- ip_address
-        '255.255.255.0', -- subnet_mask
-        '192.168.1.1', -- gateway
-        2, -- cpu_cores
-        4, -- ram_size_gb
-        'SSD', -- storage_type
-        100, -- storage_capacity_gb
-        'SATA' -- storage_controller
-     );
+# CALL CreateVirtualMachineInstance(
+#         1, -- user_id
+#         'MyVM', -- vm_name
+#         'Description of MyVM', -- vm_description
+#         'Linux', -- os_type
+#         'Ethernet', -- network_type
+#         '192.168.1.2', -- ip_address
+#         '255.255.255.0', -- subnet_mask
+#         '192.168.1.1', -- gateway
+#         2, -- cpu_cores
+#         4, -- ram_size_gb
+#         'SSD', -- storage_type
+#         100, -- storage_capacity_gb
+#         'SATA' -- storage_controller
+#      );

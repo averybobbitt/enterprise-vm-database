@@ -1,5 +1,5 @@
 -- Temporarily change delimiter to allow the procedure to be compacted into a single statement
-DELIMITER //
+# DELIMITER //
 
 -- Define the procedure
 CREATE PROCEDURE CreateDatabaseUser(
@@ -26,10 +26,10 @@ BEGIN
 
     -- Flush privileges to apply the changes
     FLUSH PRIVILEGES;
-END //
+END;
 
 -- Set delimiter back to default
-DELIMITER ;
+# DELIMITER ;
 
 -- Use procedure to create a new user
-CALL CreateDatabaseUser('db_user', 'secretp4ssword!');
+# CALL CreateDatabaseUser('db_user', 'secretp4ssword!');

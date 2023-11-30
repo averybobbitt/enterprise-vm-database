@@ -1,0 +1,141 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<h1>Users</h1>
+<table>
+    <tr>
+        <th>User ID</th>
+        <th>Username</th>
+        <th>Email</th>
+        <th>Is Admin?</th>
+    </tr>
+    {% for user in users %}
+    <tr>
+        <td>{{ user.user_id }}</td>
+        <td>{{ user.username }}</td>
+        <td>{{ user.email }}</td>
+        <td>{{ user.is_admin }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+<h1>Instances</h1>
+<table>
+    <tr>
+        <th>VM ID</th>
+        <th>User ID</th>
+        <th>VM Name</th>
+        <th>OS Type</th>
+        <th>Status</th>
+        <th>Created At</th>
+    </tr>
+    {% for instance in instances %}
+    <tr>
+        <td>{{ instance.vm_id }}</td>
+        <td>{{ instance.user_id }}</td>
+        <td>{{ instance.vm_name }}</td>
+        <td>{{ instance.os_type }}</td>
+        <td>{{ instance.status }}</td>
+        <td>{{ instance.created_at }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+<h1>Network Configurations</h1>
+<table>
+    <tr>
+        <th>Network ID</th>
+        <th>VM ID</th>
+        <th>Network Type</th>
+        <th>IP Address</th>
+        <th>Subnet Mask</th>
+        <th>Gateway</th>
+    </tr>
+    {% for network_config in network_configs %}
+    <tr>
+        <td>{{ network_config.network_id }}</td>
+        <td>{{ network_config.vm_id }}</td>
+        <td>{{ network_config.network_type }}</td>
+        <td>{{ network_config.ip_address }}</td>
+        <td>{{ network_config.subnet_mask }}</td>
+        <td>{{ network_config.gateway }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+<h1>Storage Configurations</h1>
+<table>
+    <tr>
+        <th>Storage ID</th>
+        <th>VM ID</th>
+        <th>Storage Type</th>
+        <th>Storage Capacity (GB)</th>
+        <th>Storage Controller</th>
+    </tr>
+    {% for storage_config in storage_configs %}
+    <tr>
+        <td>{{ storage_config.storage_id }}</td>
+        <td>{{ storage_config.vm_id }}</td>
+        <td>{{ storage_config.storage_type }}</td>
+        <td>{{ storage_config.storage_capacity_gb }}</td>
+        <td>{{ storage_config.storage_controller }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+<h1>Hardware Configurations</h1>
+<table>
+    <tr>
+        <th>Hardware ID</th>
+        <th>VM ID</th>
+        <th>CPU Cores</th>
+        <th>RAM Size (GB)</th>
+    </tr>
+    {% for hardware_config in hardware_configs %}
+    <tr>
+        <td>{{ hardware_config.hardware_id }}</td>
+        <td>{{ hardware_config.vm_id }}</td>
+        <td>{{ hardware_config.cpu_cores }}</td>
+        <td>{{ hardware_config.ram_size_gb }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+<h1>Logs</h1>
+<table>
+    <tr>
+        <th>Log ID</th>
+        <th>VM ID</th>
+        <th>Log Message</th>
+        <th>Log Timestamp</th>
+    </tr>
+    {% for log in logs %}
+    <tr>
+        <td>{{ log.log_id }}</td>
+        <td>{{ log.vm_id }}</td>
+        <td>{{ log.log_message }}</td>
+        <td>{{ log.log_timestamp }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+<h1>Snapshots</h1>
+<table>
+    <tr>
+        <th>Snapshot ID</th>
+        <th>VM ID</th>
+        <th>Snapshot Name</th>
+        <th>Snapshot Description</th>
+        <th>Snapshot Timestamp</th>
+    </tr>
+    {% for snapshot in snapshots %}
+    <tr>
+        <td>{{ snapshot.snapshot_id }}</td>
+        <td>{{ snapshot.vm_id }}</td>
+        <td>{{ snapshot.snapshot_name }}</td>
+        <td>{{ snapshot.snapshot_description }}</td>
+        <td>{{ snapshot.snapshot_timestamp }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}
