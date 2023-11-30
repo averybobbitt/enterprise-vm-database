@@ -1,5 +1,7 @@
+-- Temporarily change delimiter to allow the procedure to be compacted into a single statement
 # DELIMITER //
 
+-- Define the procedure
 CREATE PROCEDURE PurgeInstances()
 BEGIN
     DECLARE vm_id_to_delete INT;
@@ -37,4 +39,5 @@ BEGIN
     CLOSE cursor_instances;
 END;
 
+-- Set delimiter back to default
 # DELIMITER ;
