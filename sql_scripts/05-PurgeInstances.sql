@@ -1,5 +1,5 @@
 -- Temporarily change delimiter to allow the procedure to be compacted into a single statement
-# DELIMITER //
+DELIMITER //
 
 -- Define the procedure
 CREATE PROCEDURE PurgeInstances()
@@ -37,7 +37,7 @@ BEGIN
     END LOOP;
 
     CLOSE cursor_instances;
-END;
+END //
 
 -- Set delimiter back to default
-# DELIMITER ;
+DELIMITER ;

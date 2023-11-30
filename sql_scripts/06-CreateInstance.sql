@@ -1,5 +1,5 @@
 -- Temporarily change delimiter to allow the procedure to be compacted into a single statement
-# DELIMITER //
+DELIMITER //
 
 -- Define the procedure
 CREATE PROCEDURE CreateVirtualMachineInstance(
@@ -38,7 +38,7 @@ BEGIN
     -- Create storage configuration
     INSERT INTO storage_configs (vm_id, storage_type, storage_capacity_gb, storage_controller)
     VALUES (new_vm_id, p_storage_type, p_storage_capacity_gb, p_storage_controller);
-END;
+END //
 
 -- Set delimiter back to default
-# DELIMITER ;
+DELIMITER ;
