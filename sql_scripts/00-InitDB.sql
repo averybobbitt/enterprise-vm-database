@@ -218,35 +218,46 @@ CREATE INDEX idx_instances_status ON instances (status);
 -- Composite index on 'instances' table for 'vm_id and vm_name'
 CREATE INDEX idx_instances_vm_info ON instances (vm_id, vm_name);
 
+-- Temporarily change delimiter to allow the procedure to be compacted into a single statement
+DELIMITER //
+
 -- Define the procedure
-CREATE PROCEDURE CreateDatabaseUser(
-    IN p_username VARCHAR(255),
-    IN p_password VARCHAR(255)
-)
+CREATE PROCEDURE PurgeInstances()
 BEGIN
-    -- Initialize procedure variables
-    DECLARE database_name VARCHAR(255);
-    SET database_name = 'virtual_machines';
+    DECLARE vm_id_to_delete INT;
+    DECLARE done BOOLEAN DEFAULT FALSE;
 
-    -- Create a database user
-    SET @create_user_query = CONCAT('CREATE USER ''', p_username, '''@''%'' IDENTIFIED BY ''', p_password, '''');
-    PREPARE create_user_stmt FROM @create_user_query;
-    EXECUTE create_user_stmt;
-    DEALLOCATE PREPARE create_user_stmt;
+    -- Get the VM IDs to delete
+    DECLARE cursor_instances CURSOR FOR
+        SELECT vm_id
+        FROM instances
+        WHERE status <> 'Running';
 
-    -- Grant privileges to the user on the specified database
-    SET @grant_query =
-            CONCAT('GRANT SELECT, INSERT, UPDATE, DELETE ON ', database_name, '.* TO ''', p_username, '''@''%''');
-    PREPARE grant_stmt FROM @grant_query;
-    EXECUTE grant_stmt;
-    DEALLOCATE PREPARE grant_stmt;
+    -- Declare handler for cursor
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
 
-    -- Flush privileges to apply the changes
-    FLUSH PRIVILEGES;
-END;
+    OPEN cursor_instances;
+    cursor_loop:
+    LOOP
+        FETCH cursor_instances INTO vm_id_to_delete;
 
--- Use procedure to create a new user
-CALL CreateDatabaseUser('db_user', 'secretp4ssword!');
+        IF done THEN
+            LEAVE cursor_loop;
+        END IF;
+
+        -- Delete related records from child tables
+        DELETE FROM snapshots WHERE vm_id = vm_id_to_delete;
+        DELETE FROM logs WHERE vm_id = vm_id_to_delete;
+        DELETE FROM hardware_configs WHERE vm_id = vm_id_to_delete;
+        DELETE FROM network_configs WHERE vm_id = vm_id_to_delete;
+        DELETE FROM storage_configs WHERE vm_id = vm_id_to_delete;
+
+        -- Delete instance from instances table
+        DELETE FROM instances WHERE vm_id = vm_id_to_delete;
+    END LOOP;
+
+    CLOSE cursor_instances;
+END //
 
 -- Define the procedure
 CREATE PROCEDURE CreateVirtualMachineInstance(
@@ -285,4 +296,7 @@ BEGIN
     -- Create storage configuration
     INSERT INTO storage_configs (vm_id, storage_type, storage_capacity_gb, storage_controller)
     VALUES (new_vm_id, p_storage_type, p_storage_capacity_gb, p_storage_controller);
-END;
+END //
+
+-- Set delimiter back to default
+DELIMITER ;
